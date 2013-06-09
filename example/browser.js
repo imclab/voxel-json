@@ -30,6 +30,3 @@ function generate (x, y_, z) {
     var y = y_ + 25;
     return x*x + y*y + z*z < 400;
 }
-
-function posToKey (pos) { return pos.join('|') }
-function keyToPos (key) { return key.split('|') }

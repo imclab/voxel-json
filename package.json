@@ -1,5 +1,23 @@
 {
-  "name": "voxel-json",
-  "version": "0.0.0",
-  "main": "index.js"
+    "name": "voxel-json",
+    "version": "0.0.0",
+    "description": "capture player edits into json voxel diffs",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/substack/voxel-json.git"
+    },
+    "homepage": "https://github.com/substack/voxel-json",
+    "keywords": [
+        "voxel",
+        "game",
+        "json",
+        "data"
+    ],
+    "author": {
+        "name": "James Halliday",
+        "email": "mail@substack.net",
+        "url": "http://substack.net"
+    },
+    "license": "MIT"
 }
