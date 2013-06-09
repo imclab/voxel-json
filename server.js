@@ -4,8 +4,8 @@ var ecstatic = require('ecstatic');
 var filesd = {
     site: ecstatic(__dirname + '/static'),
     textures: ecstatic({
-        root: path.dirname(require.resolve('painterly-textures')),
-        basedir: '/textures'
+        root: require('painterly-textures')(),
+        baseDir: '/textures/'
     })
 };
 

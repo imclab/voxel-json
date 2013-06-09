@@ -1,6 +1,9 @@
 var game = require('voxel-hello-world')({
     generate: generate,
-    texturePath: '/textures/'
+    texturePath: '/textures/',
+    playerSkin: 'substack.png',
+    materialFlatColor: false,
+    materials: [ 'grass', 'brick', 'dirt' ]
 });
 
 function generate (x, y_, z) {
