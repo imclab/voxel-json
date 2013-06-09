@@ -2,44 +2,42 @@ var http = require('http');
 var path = require('path');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
-mkdirp.sync(__dirname + '/data');
+mkdirp.sync(__dirname + '/static/data');
 
 var ecstatic = require('ecstatic');
-var filesd = {
-    site: ecstatic(__dirname + '/static'),
-    textures: ecstatic({
+var staticDir = {
+    texture: ecstatic({
         root: require('painterly-textures')(),
-        baseDir: '/textures/'
+        baseDir: '/textures'
+    }),
+    site: ecstatic({
+        root: __dirname + '/static',
+    }),
+    data: ecstatic({
+        root: __dirname + '/static/data',
+        baseDir: '/data',
+        cache: 0
     })
 };
 
 var server = http.createServer(function (req, res) {
-    if (/^\/[\w-]+$/.test(req.url)) {
+    if (req.method === 'POST' && /^\/data\/[\w-]+\.json$/.test(req.url)) {
+        var file = path.join(__dirname, 'static', req.url);
+        req.pipe(fs.createWriteStream(file)).on('close', function () {
+            console.log('wrote to ' + file);
+            res.end('ok\n');
+        });
+    }
+    else if (/^\/[\w-]+$/.test(req.url)) {
         req.url = '/';
-        filesd.site(req, res);
+        staticDir.site(req, res);
     }
     else if (RegExp('^/textures/').test(req.url)) {
-        filesd.textures(req, res);
+        staticDir.texture(req, res);
     }
-    else filesd.site(req, res)
+    else if (RegExp('^/data/').test(req.url)) {
+        staticDir.data(req, res);
+    }
+    else staticDir.site(req, res);
 });
 server.listen(5005);
-
-var shoe = require('shoe');
-var split = require('split');
-var through = require('through');
-
-var sock = shoe(function (stream) {
-    stream.pipe(split()).pipe(through(function (line) {
-        try { var msg = JSON.parse(line) }
-        catch (e) { return }
-        if (!/^[\w-]+$/.test(msg.path)) return;
-        var file = path.join(__dirname, 'data', msg.path + '.json');
-        
-        fs.writeFile(file, JSON.stringify(msg.data), function (err) {
-            if (err) console.error(err)
-            else console.log('wrote to ' + file);
-        });
-    }));
-});
-sock.install(server, '/sock');

@@ -8,7 +8,7 @@ module.exports = function (game) {
             };
         },
         applyDiff: function (d) {
-            return apply(game, diff);
+            return apply(game, d);
         },
         apply: function (json) {
             return apply(game, json);

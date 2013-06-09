@@ -6,14 +6,23 @@ var game = require('voxel-hello-world')({
     materials: [ 'grass', 'brick', 'dirt' ]
 });
 var vjson = require('../')(game);
-var stream = require('shoe')('/sock');
+
+var hyperquest = require('hyperquest');
+var concat = require('concat-stream');
+var dataHref = '/data/' + (location.pathname.slice(1) || 'default') + '.json';
+
+hyperquest(dataHref).pipe(concat(function (body) {
+    try {
+        var world = JSON.parse(body);
+        vjson.apply(world);
+    }
+    catch (e) {}
+}));
 
 window.addEventListener('keydown', function (ev) {
     if (ev.which === 'Z'.charCodeAt(0)) {
-        stream.write(JSON.stringify({
-            path: location.pathname.slice(1) || 'index',
-            data: vjson.toJSON()
-        }) + '\n');
+        var hq = hyperquest.post(dataHref);
+        hq.end(JSON.stringify(vjson.toJSON()) + '\n');
     }
 });
 
