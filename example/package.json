@@ -1,0 +1,17 @@
+{
+  "name": "voxel-json-example",
+  "version": "0.0.0",
+  "devDependencies": {
+    "painterly-textures": "~0.0.3",
+    "voxel-hello-world": "~0.6.0",
+    "browserify": "~2.18.1",
+    "ecstatic": "~0.4.5",
+    "watchify": "~0.0.1",
+    "hyperquest": "~0.1.6",
+    "concat-stream": "~1.0.0",
+    "mkdirp": "~0.3.5"
+  },
+  "scripts": {
+    "watch": "watchify browser.js --debug --noparse=three -o static/bundle.js -v --fast"
+  }
+}
