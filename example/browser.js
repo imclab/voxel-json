@@ -5,21 +5,16 @@ var game = require('voxel-hello-world')({
     materialFlatColor: false,
     materials: [ 'grass', 'brick', 'dirt' ]
 });
+var vjson = require('../')(game);
+var stream = require('shoe')('/sock');
 
-var diff = {};
-window.diff = diff;
-
-window.applyDiff = applyDiff;
-
-function applyDiff (diff) {
-    Object.keys(diff).forEach(function (key) {
-        var pos = keyToPos(key);
-        game.setBlock(pos, diff[key]);
-    });
-}
-
-game.on('setBlock', function (pos, value) {
-    diff[posToKey(pos)] = value;
+window.addEventListener('keydown', function (ev) {
+    if (ev.which === 'Z'.charCodeAt(0)) {
+        stream.write(JSON.stringify({
+            path: location.pathname.slice(1) || 'index',
+            data: vjson.toJSON()
+        }) + '\n');
+    }
 });
 
 function generate (x, y_, z) {
